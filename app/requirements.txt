@@ -1,3 +1,4 @@
 requests
 selenium>=4.9.1
 boto3 # already installed in Lambda execution environment
+pillow

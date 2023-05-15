@@ -13,6 +13,8 @@ if DRIVER_VERSION is None:
 CHROME_PATH = os.environ["CHROME_PATH"] if "CHROME_PATH" in os.environ else f"/opt/chrome/{CHROME_VERSION}/chrome"
 DRIVER_PATH = os.environ["DRIVER_PATH"] if "DRIVER_PATH" in os.environ else f"/opt/chromedriver/{DRIVER_VERSION}/chromedriver"
 
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36"
+
 def get_driver() -> Chrome:
     """Instantiates and configures Selenium WebDriver."""
     options = _get_chrome_options()
@@ -34,9 +36,10 @@ def _get_chrome_options() -> ChromeOptions:
     chrome_options.add_argument("--disable-dev-tools")
     chrome_options.add_argument("--no-zygote")
     chrome_options.add_argument("--single-process")
-    chrome_options.add_argument("window-size=2560x1440")
+    chrome_options.add_argument("window-size=2610x1440")
     chrome_options.add_argument("--user-data-dir=/tmp/chrome-user-data")
     chrome_options.add_argument("--remote-debugging-port=9222")
+    chrome_options.add_argument(f"user-agent={USER_AGENT}")
     chrome_options.binary_location = CHROME_PATH
 
     return chrome_options
