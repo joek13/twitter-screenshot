@@ -23,7 +23,10 @@ def screenshot_tweet(tweet_url: str) -> Image.Image:
     """Screenshots a tweet and returns PIL.Image.
     """
     if not TWEET_URL_REGEX.match(tweet_url):
-        raise ValueError(f"Invalid tweet url ${tweet_url}")
+        tweet_url = "https://twitter.com/" + tweet_url
+
+        if not TWEET_URL_REGEX.match(tweet_url):
+            raise ValueError(f"Invalid tweet url ${tweet_url}")
     
     browser.get(tweet_url)
     time.sleep(3)
