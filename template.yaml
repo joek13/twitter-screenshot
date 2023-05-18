@@ -3,9 +3,16 @@ Transform: AWS::Serverless-2016-10-31
 Description: SAM Template for twitter-screenshot
 
 Resources:
+  ScreenshotApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      BinaryMediaTypes: ["*/*"]
   ScreenshotFunction:
     Type: AWS::Serverless::Function
     Properties:
+      MemorySize: 1024
+      Timeout: 303
       PackageType: Image
       Architectures:
         - x86_64
@@ -13,8 +20,10 @@ Resources:
         TakeScreenshot:
           Type: Api
           Properties:
-            Path: /screenshot
+            Path: /screenshot/{tweet_url}
             Method: get
+            RestApiId:
+              Ref: ScreenshotApi
     Metadata:
       Dockerfile: Dockerfile
       DockerContext: ./app
@@ -23,7 +32,7 @@ Resources:
 Outputs:
   TwitterScreenshotApi:
     Description: "API Gateway URL for prod stage of screenshot function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/screenshot/"
+    Value: !Sub "https://${ScreenshotApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/screenshot/"
   ScreenshotFunction:
     Description: "Screenshot Lambda Function ARN"
     Value: !GetAtt ScreenshotFunction.Arn

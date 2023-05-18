@@ -26,12 +26,14 @@ def screenshot_tweet(tweet_url: str) -> Image.Image:
         tweet_url = "https://twitter.com/" + tweet_url
 
         if not TWEET_URL_REGEX.match(tweet_url):
-            raise ValueError(f"Invalid tweet url ${tweet_url}")
+            raise ValueError(f"Invalid tweet url {tweet_url}")
     
     browser.get(tweet_url)
-    time.sleep(3)
+    time.sleep(8)
+
     browser.execute_script(f"document.body.style.zoom='{_ZOOM_FACTOR * 100}%'") # hack to make tweet larger
-    browser.execute_script(_HIDE_ELEMENTS_SCRIPT) # hide some ui elements from screenshot
+    # TODO: figure out why this crashes Lambdas
+    # browser.execute_script(_HIDE_ELEMENTS_SCRIPT) # hide some ui elements from screenshot
 
     tweet = browser.find_element(By.TAG_NAME, "article")
     loc = tweet.location
@@ -40,13 +42,11 @@ def screenshot_tweet(tweet_url: str) -> Image.Image:
     full_screenshot = browser.get_screenshot_as_png()
     img = Image.open(BytesIO(full_screenshot))
 
-    # for whatever reason, the window is exactly twice as large as requested,
-    # even when --device-scale-factor=1 is set.
     bounds = (
-        _ZOOM_FACTOR * 2 * (loc["x"] + _IMAGE_CROP_OFFSET[0]),
-        _ZOOM_FACTOR * 2 * (loc["y"] + _IMAGE_CROP_OFFSET[1]),
-        _ZOOM_FACTOR * 2 * (loc["x"] + size["width"] + _IMAGE_CROP_OFFSET[2]),
-        _ZOOM_FACTOR * 2 * (loc["y"] + size["height"] + _IMAGE_CROP_OFFSET[3])
+        _ZOOM_FACTOR * (loc["x"] + _IMAGE_CROP_OFFSET[0]),
+        _ZOOM_FACTOR * (loc["y"] + _IMAGE_CROP_OFFSET[1]),
+        _ZOOM_FACTOR * (loc["x"] + size["width"] + _IMAGE_CROP_OFFSET[2]),
+        _ZOOM_FACTOR * (loc["y"] + size["height"] + _IMAGE_CROP_OFFSET[3])
     )
     cropped = img.crop(bounds)
 
