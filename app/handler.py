@@ -34,8 +34,9 @@ def lambda_handler(event, context):
         tweet_url = urllib.parse.unquote(path_params["tweet_url"])
 
         browser = screenshotter.driver.get_driver()
-        image = screenshotter.twitter.screenshot_tweet(browser, tweet_url)
 
+        image = screenshotter.twitter.screenshot_tweet(browser, tweet_url)
+        image = screenshotter.imgutil.pad_square(image, (255,255,255,255))
         buffer = BytesIO()
         image.save(buffer, "png")
     except ValueError as e:
