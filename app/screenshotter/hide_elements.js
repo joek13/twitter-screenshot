@@ -16,4 +16,8 @@ const TARGETS = [
     "/html/body/div[1]/div/div/div[2]/main/div/div/div/div/div/section/div/div/div[1]/div/div/article/div/div/div[3]/div[7]"
 ];
 
-TARGETS.forEach(elem_xpath => getElementByXpath(elem_xpath).style.visibility = "hidden");
+TARGETS.forEach(elem_xpath => {
+    let elem = getElementByXpath(elem_xpath);
+    if(!!elem)
+        elem.style.visibility = "hidden";
+});
