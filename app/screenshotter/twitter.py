@@ -1,14 +1,14 @@
 from pathlib import Path
-from . import driver
 
 import re
 import time
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
 
-_ZOOM_FACTOR = 1
+_ZOOM_FACTOR = 2
 TWEET_URL_REGEX = re.compile(r"(?:https?://)?twitter\.com/[a-zA-Z_]+/status/\d+", re.MULTILINE)
 
 _HIDE_ELEMENTS_SCRIPT = ""
@@ -17,9 +17,7 @@ with open(Path(__file__).resolve().parent.joinpath("hide_elements.js"), "r") as 
 
 _IMAGE_CROP_OFFSET = (0, 0, 0, -110) # remove whitespace where ui elements were
 
-browser = driver.get_driver()
-
-def screenshot_tweet(tweet_url: str) -> Image.Image:
+def screenshot_tweet(browser: Chrome, tweet_url: str) -> Image.Image:
     """Screenshots a tweet and returns PIL.Image.
     """
     if not TWEET_URL_REGEX.match(tweet_url):
@@ -32,8 +30,7 @@ def screenshot_tweet(tweet_url: str) -> Image.Image:
     time.sleep(8)
 
     browser.execute_script(f"document.body.style.zoom='{_ZOOM_FACTOR * 100}%'") # hack to make tweet larger
-    # TODO: figure out why this crashes Lambdas
-    # browser.execute_script(_HIDE_ELEMENTS_SCRIPT) # hide some ui elements from screenshot
+    browser.execute_script(_HIDE_ELEMENTS_SCRIPT) # hide some ui elements from screenshot
 
     tweet = browser.find_element(By.TAG_NAME, "article")
     loc = tweet.location

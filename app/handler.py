@@ -32,7 +32,10 @@ def lambda_handler(event, context):
             raise ValueError("Path parameter 'tweet_url' is required.")
 
         tweet_url = urllib.parse.unquote(path_params["tweet_url"])
-        image = screenshotter.twitter.screenshot_tweet(tweet_url)
+
+        browser = screenshotter.driver.get_driver()
+        image = screenshotter.twitter.screenshot_tweet(browser, tweet_url)
+
         buffer = BytesIO()
         image.save(buffer, "png")
     except ValueError as e:
