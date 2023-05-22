@@ -46,6 +46,7 @@ GET /screenshot/https%3A%2F%2Ftwitter.com%2Fgabebergado%2Fstatus%2F1317104551032
 - `tweet_url`: either:
     - URL-encoded tweet URL (e.g., `https%3A%2F%2Ftwitter.com%2Fgabebergado%2Fstatus%2F1317104551032442880%3Fs%3D20`)
     - URL-encoded tweet path (after `https://twitter.com/`) (e.g., `gabebergado%2Fstatus%2F1317104551032442880%3Fs%3D20`) 
+
 **Response codes:**
 - **200 OK:** Success. Response body is screenshot PNG.
 - **400 Bad Request:** invalid Tweet URL, or some other error. See `message` in response body JSON.
