@@ -36,7 +36,7 @@ def _get_chrome_options() -> ChromeOptions:
     chrome_options.add_argument("--disable-dev-tools")
     chrome_options.add_argument("--no-zygote")
     chrome_options.add_argument("--single-process")
-    chrome_options.add_argument("window-size=2610x1440")
+    chrome_options.add_argument("window-size=3915x2160")
     chrome_options.add_argument("--user-data-dir=/tmp/chrome-user-data")
     chrome_options.add_argument("--remote-debugging-port=9222")
     chrome_options.add_argument(f"user-agent={USER_AGENT}")
